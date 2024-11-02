@@ -26,7 +26,13 @@ class Convidados(models.Model):
     maximo_acompanhantes = models.PositiveIntegerField(default=0)
     token = models.CharField(max_length=25)
     status = models.CharField(max_length=2, choices=status_choices, default='AC')
+    
     def save(self, *args, **kwargs):
         if not self.token:
             self.token = secrets.token_urlsafe(16)
         super(Convidados, self).save(*args, **kwargs)
+
+
+    @property
+    def link_convite(self):
+        return f'http://127.0.0.1:8000/convidados?token={self.token}'
