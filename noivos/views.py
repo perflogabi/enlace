@@ -2,14 +2,17 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import Presentes, Convidados
 
-# Create your views here.
 def home(request):
 
     if request.method == 'GET':
         presentes = Presentes.objects.all()
+        nao_reservado = Presentes.objects.filter(reservado=False).count()
+        reservado = Presentes.objects.filter(reservado=True).count()
+        data = [nao_reservado, reservado]
+
         for i in presentes:
             print(i.nome_presente)
-        return render(request, 'home.html', {'presentes': presentes})
+        return render(request, 'home.html', {'presentes': presentes, 'data': data})
     elif request.method == 'POST':
         nome_presente = request.POST.get('nome_presente')
         preco = request.POST.get('preco')
